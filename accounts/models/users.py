@@ -23,8 +23,8 @@ class User(AuditableMixin, AbstractUser):
     
     class Meta:
         db_table = 'users'
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
+        verbose_name = 'usuario'
+        verbose_name_plural = 'usuarios'
         
     @property
     def get_full_name(self):
