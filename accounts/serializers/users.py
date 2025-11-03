@@ -1,13 +1,13 @@
 from rest_framework import serializers
 from ..models.users import User
-from nomenclatures.serializers import AreaSerializer
+from nomenclatures.serializers import AreaRelateSerializer
 from common.utils.passwords import PasswordValidator
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 
 
 class UserSerializer(serializers.ModelSerializer):
-    area = AreaSerializer(many=False, read_only=True)
+    area = AreaRelateSerializer(many=False, read_only=True)
 
     class Meta:
         model = User

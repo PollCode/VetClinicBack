@@ -16,6 +16,7 @@ class AuditableMixin(models.Model):
         verbose_name=_('deleted date'), null=True, blank=True)
     deleted_by = models.CharField(verbose_name=_(
         'deleted by'), max_length=255, null=True, blank=True)
+    deleted = models.BooleanField(default=False, verbose_name='deleted')
 
     class Meta:
         abstract = True
