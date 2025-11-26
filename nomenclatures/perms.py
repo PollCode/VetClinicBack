@@ -66,8 +66,6 @@ class HasDeleteAreaPermission(BasePermission):
 
         raise PermissionDenied('No tienes permiso para eliminar áreas.')
 
-
-
 class HasAddSpeciesPermission(BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
