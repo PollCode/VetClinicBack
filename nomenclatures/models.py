@@ -17,7 +17,7 @@ class Area(AuditableMixin):
         return self.name
 
 class Species(AuditableMixin):
-    name = models.CharField(max_length=100) 
+    name = models.CharField(max_length=10, unique=True) 
     description = models.CharField(max_length=255, blank=True, null=True)
     
     class Meta:
