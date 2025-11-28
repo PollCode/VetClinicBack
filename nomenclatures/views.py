@@ -37,7 +37,8 @@ class AreaViewset(viewsets.ModelViewSet):
     
     
     def list(self, request):
-        serializer = self.get_serializer(self.queryset.all(), many=True)
+        areas = self.queryset.filter(deleted=False)
+        serializer = self.get_serializer(areas, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def retrieve(self, request, pk=None):
@@ -96,7 +97,8 @@ class SpeciesViewset(viewsets.ModelViewSet):
         return super().get_permissions()
     
     def list(self, request):
-        serializer = self.get_serializer(self.queryset.all(), many=True)
+        species = self.queryset.filter(deleted=False)
+        serializer = self.get_serializer(species, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def retrieve(self, request, pk=None):
@@ -153,7 +155,8 @@ class BreedViewset(viewsets.ModelViewSet):
         return super().get_permissions()
     
     def list(self, request):
-        serializer = self.get_serializer(self.queryset.all(), many=True)
+        breeds = self.queryset.filter(deleted=False)
+        serializer = self.get_serializer(breeds, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def retrieve(self, request, pk=None):
