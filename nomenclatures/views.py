@@ -4,12 +4,10 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from .models import Area, Species, Breed
+from .models import Area, Breed
 from .serializers import (AreaSerializer, AreaCreateUpdateSerializer, 
-                          SpeciesSerializer, SpeciesCreateUpdateSerializer, 
                           BreedSerializer, BreedCreateUpdateSerializer)
 from .perms import (HasViewAreaPermission, HasAddAreaPermission, HasChangeAreaPermission, HasDeleteAreaPermission,
-                    HasViewSpeciesPermission, HasAddSpeciesPermission, HasChangeSpeciesPermission, HasDeleteSpeciesPermission,
                     HasViewBreedPermission, HasAddBreedPermission, HasChangeBreedPermission, HasDeleteBreedPermission)
 from common.utils.auth import get_username_from_request
 
@@ -73,64 +71,7 @@ class AreaViewset(viewsets.ModelViewSet):
             return Response({"detail": "Área no encontrada"}, status=status.HTTP_404_NOT_FOUND)
         
         
-    
-    
-class SpeciesViewset(viewsets.ModelViewSet):
-    queryset = Species.objects.all()
-    
-    def get_serializer_class(self):
-        if self.action == 'list' or self.action == 'retrieve':
-            return SpeciesSerializer
-        elif self.action == 'create' or 'partial_update' or 'update':
-            return SpeciesCreateUpdateSerializer
-        return super().get_serializer_class()
-    
-    def get_permissions(self):
-        if self.action == 'list' or self.action == 'retrieve':
-            return [HasViewSpeciesPermission(), IsAuthenticated()]
-        elif self.action == 'create':
-            return [HasAddSpeciesPermission(), IsAuthenticated()]
-        elif self.action == 'update' or self.action == 'partial_update':
-            return [HasChangeSpeciesPermission(), IsAuthenticated()]
-        elif self.action == 'destroy':
-            return [HasDeleteSpeciesPermission(), IsAuthenticated()]
-        return super().get_permissions()
-    
-    def list(self, request):
-        species = self.queryset.filter(deleted=False)
-        serializer = self.get_serializer(species, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
-    def retrieve(self, request, pk=None):
-        serializer = self.get_serializer(self.queryset.get(id=pk), many=False)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
-    def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            species = serializer.save(created_by=get_username_from_request(request))
-            return Response(SpeciesSerializer(species).data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def update(self, request, pk=None, **kwargs):
-        partial = kwargs.pop('partial', False)
-        species = self.get_object()
-        serializer = self.get_serializer(species, data=request.data, partial=partial)
-        if serializer.is_valid():
-            updated_species = serializer.save(updated_by=get_username_from_request(request))
-            return Response(SpeciesSerializer(updated_species).data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def destroy(self, request, pk=None):
-        try:
-            species = Species.objects.get(id=pk)
-            species.deleted_date=timezone.now() 
-            species.deleted_by=get_username_from_request(request)
-            species.deleted=True
-            species.save()
-            return Response(status=status.HTTP_204_NO_CONTENT)    
-        except Species.DoesNotExist:
-            return Response({"detail": "Especie no encontrada"}, status=status.HTTP_404_NOT_FOUND)
+
     
     
 class BreedViewset(viewsets.ModelViewSet):

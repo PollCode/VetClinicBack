@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Area, Species, Breed
+from .models import Area, Breed
 
 class AreaAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'description', )
@@ -14,18 +14,6 @@ class AreaAdmin(admin.ModelAdmin):
         'deleted_by'
     )
     
-class SpeciesAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'description')
-    search_fields = ('name',)
-    list_filter = ('name',)
-    readonly_fields = (
-        'created_date',
-        'created_by',
-        'updated_date',
-        'updated_by',
-        'deleted_date',
-        'deleted_by',
-    )
     
 class BreedAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'species', 'size_category')
@@ -41,5 +29,4 @@ class BreedAdmin(admin.ModelAdmin):
     )
     
 admin.site.register(Area, AreaAdmin)
-admin.site.register(Species, SpeciesAdmin)
 admin.site.register(Breed, BreedAdmin)

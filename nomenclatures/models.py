@@ -1,11 +1,25 @@
 from django.db import models
 from common.models import AuditableMixin
-from common.utils.size_validators import SIZE_CHOICES
 
+
+SPECIES_CHOICES = [
+    ('canino', 'Canino'),
+    ('felino', 'Felino'),
+]
+    
+
+SIZE_CHOICES = [
+    ('toy', 'Toy/Enano'),
+    ('pequeño', 'Pequeño'),
+    ('mediano', 'Mediano'),
+    ('grande', 'Grande'),
+    ('gigante', 'Gigante'),
+    ('gato_estandar', 'Gato Estandar'),
+]
 
 
 class Area(AuditableMixin):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, verbose_name="Nombre")
     description = models.CharField(max_length=100, null=False, blank=False)
     
     class Meta:
@@ -15,22 +29,11 @@ class Area(AuditableMixin):
         
     def __str__(self):
         return self.name
-
-class Species(AuditableMixin):
-    name = models.CharField(max_length=10, unique=True) 
-    description = models.CharField(max_length=255, blank=True, null=True)
-    
-    class Meta:
-        db_table = 'species'
-        verbose_name = 'Especie'
-        verbose_name_plural = 'Especies'
-        
-    def __str__(self):
-        return self.name
     
 class Breed(AuditableMixin):
-    name = models.CharField(max_length=100) 
-    species = models.ForeignKey(Species, on_delete=models.SET_NULL, related_name='breeds', null=True, blank=True)
+
+    name = models.CharField(max_length=100, unique=True, verbose_name="Nombre") 
+    species = models.CharField(max_length=100,verbose_name="Especie", choices=SPECIES_CHOICES)
     size_category = models.CharField(max_length=100, choices=SIZE_CHOICES)
     
     class Meta:
